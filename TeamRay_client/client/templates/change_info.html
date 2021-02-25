@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<!--
+author:guojunyu
+date:2019-05-19
+desc:this demo is about blog. PLEASE NOTE:If you have trouble running it ,try any of the other demos or connect with auther.
+A ny individuals and organizations and not for commercial use, professiona website for customized web site.
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>修改个人信息</title>
+    <!-- 引入favicon图标 -->
+    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" />
+    <!-- 引入我们初始化的css -->
+    <link rel="stylesheet" href="../static/css/base.css">
+    <!-- 引入我们自己的注册页面的css -->
+    <link rel="stylesheet" href="../static/css/change_info.css">
+    <script src="../static/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="w">
+        <header>
+            <div class="logo">
+                <a href="/index"> <img src="../static/images/logo2.png" alt=""></a>
+            </div>
+        </header>
+        <div class="registerarea">
+            <h3>修改个人信息
+                <div class="login">返回查看<a href="index" id="my_info">&nbsp 我的资料&nbsp&nbsp&nbsp</a></div>
+            </h3>
+            <div class="reg_form">
+
+                <ul>
+
+                    <li><label for="">头像：</label>
+                        <img src="../static/images/T.png" alt="" id="avatar"></li>
+                    <input type="file" class="inp" id="file"><input type="button" value="上传" class="ptn" onclick="upload()" id="submit-btn">
+                    <li><label for="">用户名：</label> <input type="text" class="inp" id="username" value="" readonly>&nbsp&nbsp&nbsp（不可修改）</li>
+
+                    <li><label for="">手机号：</label> <input type="text" class="inp" id="phone"></li>
+                    <li><label for="">个人邮箱：</label> <input type="email" class="inp" id="email"></li>
+
+                    <li>
+                        <input type="button" value="点击保存" class="btn" onclick="changeInfo()">
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <footer>
+            <div class="mod_copyright">
+                <div class="links">
+                    <a href="#">关于我们</a> | <a href="#">联系我们</a> | 联系客服 | 商家入驻 | 营销中心 | 手机TeamRay | 友情链接 | 销售联盟 | TeamRay社区 | TeamRay公益 | English Site | Contact U
+                </div>
+                <div class="copyright">
+                    地址：北京市东城区珍贝大厦二层达内python学院 邮编：100096 电话：400-618-4000 传真：010-82935100 邮箱: TeamRay@163.con <br> 京ICP备08001421号京公网安备110108007702
+                </div>
+            </div>
+    </div>
+    </footer>
+    </div>
+</body>
+
+<script>
+    token = window.localStorage.getItem('TeamRay_token');
+    username = window.localStorage.getItem('TeamRay_user');
+    document.getElementById('my_info').href = '/' + username + '/my_info'
+    var html_body = ''
+    $.ajax({
+        // 请求方式
+        type: "get",
+        // url
+        url: "http://127.0.0.1:8000/v1/users/" + username,
+        beforeSend: function(request) {
+            request.setRequestHeader("Authorization", token);
+        },
+        success: function(result) {
+            if (200 == result.code) {
+                console.log(result);
+                $(document).attr('title', '个人信息修改-' + username + '的TeamRay空间');
+                //avatar
+                document.getElementById('username').value = username
+                document.getElementById('phone').value = result.data.phone
+                document.getElementById('email').value = result.data.email
+
+
+                if (result.data.avatar) {
+                    document.getElementById('avatar').src = 'http://127.0.0.1:8000/media/' + result.data.avatar
+                }
+
+            } else {
+                alert(result.error)
+            }
+        }
+    });
+
+    function upload() {
+
+        var fileinput = $('#file').get(0).files[0].name
+        console.log('图片信息', fileinput)
+        if (!fileinput) {
+            alert('请上传图片！！')
+        } else {
+            var token = window.localStorage.getItem('TeamRay_token');
+            var username = window.localStorage.getItem('TeamRay_user');
+            //$('.avatar_form').attr('action', 'http://127.0.0.1/users/avatar')
+            var url = 'http://127.0.0.1:8000/v1/users/' + username + '/avatar'
+            formdata = new FormData();
+            formdata.append("avatar", $("#file")[0].files[0]);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                url: url,
+                type: 'post',
+                data: formdata,
+                beforeSend: function(request) {
+                    request.setRequestHeader("Authorization", token);
+                },
+                success: function(arg) {
+                    if (arg.code == 200) {
+                        alert('成功！')
+                        window.location.reload()
+                    } else {
+                        alert('失败！')
+                    }
+                }
+            })
+
+        }
+    }
+
+    function changeInfo() {
+        var token = window.localStorage.getItem('TeamRay_token');
+        var username = window.localStorage.getItem('TeamRay_user');
+        var phone = $('#phone').val();
+        var email = $('#email').val();
+        var post_data = {
+            'phone': phone,
+            'email': email
+        };
+
+        $.ajax({
+            // 请求方式
+            type: "put",
+            // contentType 
+            contentType: "application/json",
+            // dataType
+            dataType: "json",
+            // url
+            url: "http://127.0.0.1:8000/v1/users/" + username,
+            // 把JS的对象或数组序列化一个json 字符串
+            data: JSON.stringify(post_data),
+            // result 为请求的返回结果对象
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", token);
+            },
+            success: function(result) {
+                if (200 == result.code) {
+                    alert("修改成功")
+
+                } else {
+                    alert(result.error)
+                    window.location.href = '/login'
+                }
+            }
+        });
+
+    }
+</script>
+
+
+</html>

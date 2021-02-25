@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<!--
+author:guojunyu
+date:2019-05
+desc:this demo is about blog. PLEASE NOTE:If you have trouble running it ,try any of the other demos or connect with auther.
+A ny individuals and organizations and not for commercial use, professiona website for customized web site.
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户登录</title>
+    <!-- 引入favicon图标 -->
+    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" />
+    <!-- 引入我们初始化的css -->
+    <link rel="stylesheet" href="../static/css/base.css">
+    <!-- 引入我们自己的注册页面的css -->
+    <link rel="stylesheet" href="../static/css/login.css">
+    <script src="../static/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="w">
+        <header>
+            <div class="logo">
+                <a href="/index"> <img src="../static/images/logo2.png" alt=""></a>
+            </div>
+        </header>
+        <div class="registerarea">
+            <h3>用户登录
+                <div class="login">还没有账号，去<a href="/register">注册</a></div>
+            </h3>
+            <div class="reg_form">
+
+                <ul>
+                    <li><label for="">用户名：</label> <input type="text" class="inp" id="username">
+                        <span class="success"> <i id="username2"></i></span></li>
+                    <li><label for="">密码：</label> <input type="password" class="inp" id="password">
+                        <span class="error"> <i class="" id="password2"></i></span></li>
+
+                    <li>
+                        <input type="button" value="点击登录" class="btn" onclick="login(this)">
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <footer>
+            <div class="mod_copyright">
+                <div class="links">
+                    <a href="#">关于我们</a> | <a href="#">联系我们</a> | 联系客服 | 商家入驻 | 营销中心 | 手机TeamRay | 友情链接 | 销售联盟 | TeamRay社区 | TeamRay公益 | English Site | Contact U
+                </div>
+                <div class="copyright">
+                    地址：北京市东城区珍贝大厦二层达内python学院 邮编：100096 电话：400-618-4000 传真：010-82935100 邮箱: TeamRay@163.con <br> 京ICP备08001421号京公网安备110108007702
+                </div>
+            </div>
+    </div>
+    </footer>
+    </div>
+</body>
+<script>
+    function login() {
+        var username = $('#username').val()
+        var password = $('#password').val()
+        var post_data = {
+            'username': username,
+            'password': password,
+        }
+        $.ajax({
+            url: 'http://127.0.0.1:8000/v1/tokens',
+            type: 'POST',
+            data: JSON.stringify(post_data),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(res) {
+                if (res.code == 200) {
+                    alert('登陆成功')
+                        // 储存用户名和token
+                    window.localStorage.setItem('TeamRay_token', res.data.token)
+                    window.localStorage.setItem('TeamRay_user', res.username)
+                    window.location.href = '/index'
+                } else {
+                    console.log(res.code, res.error)
+                    alert(res.error)
+                }
+            }
+        })
+
+    }
+</script>
+
+</html>

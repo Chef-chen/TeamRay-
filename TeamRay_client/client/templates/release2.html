@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<!--
+author:guojunyu
+date:2019-05
+desc:this demo is about blog. PLEASE NOTE:If you have trouble running it ,try any of the other demos or connect with auther.
+A ny individuals and organizations and not for commercial use, professiona website for customized web site.
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加商品</title>
+    <!-- 引入favicon图标 -->
+    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
+    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+    <!-- 引入我们初始化的css -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <!-- 引入我们自己的注册页面的css -->
+    <link rel="stylesheet" href="/static/css/release.css">
+    <script src="/static/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="w">
+        <header>
+            <div class="logo">
+                <a href="/index"> <img src="/static/images/logo2.png" alt=""></a>
+            </div>
+        </header>
+        <div class="registerarea">
+
+            <h3>添加商品
+                <div class="login">没有商品，去<a href="/index">首页</a></div>
+            </h3>
+            <div class="reg_form">
+
+                <ul>
+                    <li><label for="">商品名称：</label> <input type="text" class="inp" id="title"></li>
+                    <li><label for="">商品类别：</label><input type="radio" name="type" value="房源"> 房源
+                        <input type="radio" name="type" value="车源"> 车源</li>
+
+                    <li><label for="">商品图片：</label> <input type="file" id="pic">
+                        <button class='ptn' onclick="upload()">上传</button>
+                    </li>
+                    <li><label for="">商品价格：</label> <input type="number" id="price" class="inp"></li>
+                    <li><label for="">商品详情：</label> </li>
+                    <li>
+                        <textarea name="" id="content" cols="30" rows="10" ;></textarea>
+                        <input type="button" value="点击提交" class="btn" id="button" name="button ">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <img class="pic" src="/static/images/T.png" alt="" id="pic2">
+
+        <footer>
+            <div class="mod_copyright ">
+                <div class="links ">
+                    <a href="# ">关于我们</a> | <a href="# ">联系我们</a> | 联系客服 | 商家入驻 | 营销中心 | 手机TeamRay | 友情链接 | 销售联盟 | TeamRay社区 | TeamRay公益 | English Site | Contact U
+                </div>
+                <div class="copyright ">
+                    地址：北京市东城区珍贝大厦二层达内python学院 邮编：100096 电话：400-618-4000 传真：010-82935100 邮箱: TeamRay@163.con <br> 京ICP备08001421号京公网安备110108007702
+                </div>
+            </div>
+    </div>
+    </footer>
+    </div>
+</body>
+<script>
+    token = window.localStorage.getItem('TeamRay_token');
+    //登陆的用户名
+    username = window.localStorage.getItem('TeamRay_user');
+    $.ajax({
+        // 请求方式
+        type: "get",
+        // url
+        url: "http://127.0.0.1:8000/v1/users/" + username,
+        async: false,
+        beforeSend: function(request) {
+            request.setRequestHeader("Authorization", token);
+        },
+        success: function(result) {
+            if (200 == result.code) {
+                //alert("请求成功")
+                //console.log(result)
+                //登陆和访问用户相等
+                $('#button').on('click', function() {
+
+                    var content = document.getElementById('content').value
+                    var title = document.getElementById('title').value
+                    var type = $('input[name="type"]:checked').val(); 
+
+                    var price = document.getElementById('price').value
+                    var fileinput = $('#pic').get(0).files[0].name
+
+
+                    // console.log('111111')
+                    // console.log(title)
+                    // console.log(title_after)
+                    // console.log('111111')
+                    var post_data = {
+                        'content': content,
+                        'type': type,
+                        'title': title,
+                        'price': price,
+                        'pic': fileinput
+                    }
+
+                    $.ajax({
+                        // 请求方式
+                        type: "post",
+                        // contentType 
+                        contentType: "application/json",
+                        // dataType
+                        dataType: "json",
+                        // url
+                        url: "http://127.0.0.1:8000/v1/good/" + username,
+                        //url:"http://127.0.0.1:7000/v1/topics/" + username,
+                        // 把JS的对象或数组序列化一个json 字符串
+                        data: JSON.stringify(post_data),
+                        // result 为请求的返回结果对象
+                        beforeSend: function(request) {
+                            request.setRequestHeader("Authorization", token);
+                        },
+                        success: function(result) {
+                            if (200 == result.code) {
+                                alert("发布成功")
+                                window.location.href = '/' + username + '/my_info'
+                            } else {
+                                alert(result.error)
+                            }
+                        }
+                    })
+                })
+
+            } else {
+
+                alert(result.error)
+            }
+        }
+    });
+
+    function upload() {
+
+        var fileinput = $('#pic').get(0).files[0]
+        if (!fileinput) {
+            alert('请上传图片！！')
+        } else {
+            var token = window.localStorage.getItem('TeamRay_token');
+            var username = window.localStorage.getItem('TeamRay_user');
+            //$('.avatar_form').attr('action', 'http://127.0.0.1/users/avatar')
+            var url = 'http://127.0.0.1:8000/v1/users/' + username + '/pic'
+            formdata = new FormData();
+            formdata.append("pic", $("#pic")[0].files[0]);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                url: url,
+                type: 'post',
+                data: formdata,
+                beforeSend: function(request) {
+                    request.setRequestHeader("Authorization", token);
+                },
+                success: function(arg) {
+                    if (arg.code == 200) {
+                        document.getElementById('pic2').src = 'http://127.0.0.1:8000/media/' + username + '/pic/' + fileinput.name
+                        alert('成功！')
+                    } else {
+                        alert('失败！')
+                    }
+                }
+            })
+
+        }
+    }
+</script>
+
+</html>

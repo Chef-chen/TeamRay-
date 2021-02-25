@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>个人注册</title>
+    <!-- 引入favicon图标 -->
+    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" />
+    <!-- 引入我们初始化的css -->
+    <link rel="stylesheet" href="../static/css/base.css">
+    <!-- 引入我们自己的注册页面的css -->
+    <link rel="stylesheet" href="../static/css/register.css">
+    <script src="../static/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="w">
+        <header>
+            <div class="logo">
+                <a href="/index"> <img src="../static/images/logo2.png" alt=""></a>
+            </div>
+        </header>
+        <div class="registerarea">
+            <h3>注册新用户
+                <div class="login">我有账号，去<a href="/login">登陆</a></div>
+            </h3>
+            <div class="reg_form">
+
+                <ul>
+                    <li><label for="">用户名：</label> <input type="text" class="inp" onblur="yz(this)" id="username">
+                        <span class="success"> <i id="username2"></i></span></li>
+                    <li><label for="">邮箱：</label> <input type="email" class="inp" onblur="yz5(this)" id="email">
+                        <span class="success"> <i id="email2" class=""></i></span></li>
+                    <li><label for="">手机号：</label> <input type="text" class="inp" id='phone' onblur="yz2(this)">
+                        <span class="error"> <i class="" id="phone2"></i>  </span></li>
+                    <li><label for="">短信验证码：</label> <input type="text" class="inp">
+                        <span class="success"><input type="button" value="获取短信验证码" class="ptn btn" onclick="settime(this)"></span></li>
+                    <li><label for="">登录密码：</label> <input type="password" class="inp" id="password_1" onblur="yz3(this)" placeholder="请输入三位以上的密码">
+                        <span class="error"> <i class="" id="password2"></i></span></li>
+                    <li class="safe">安全程度 <em class="ruo">弱</em> <em class="zhong">中</em> <em class="qiang">强</em> </li>
+                    <li><label for="">确认密码：</label> <input type="password" class="inp" id="password_2" placeholder="请重复之前的密码" onblur="yz4(this)">
+                        <span class="error"> <i class="" id="password4"></i>  </span></li>
+                    <li class="agree"><input type="checkbox" name="" id="agree"> 同意协议并注册 <a href="#">《知晓用户协议》</a>
+
+                    </li>
+                    <li>
+                        <input type="button" value="完成注册并登录" class="btn" onclick="register(this)">
+                    </li>
+                </ul>
+
+
+                <div style="height: 500px;width: 10px;"></div>
+
+            </div>
+        </div>
+
+        <footer>
+            <div class="mod_copyright">
+                <div class="links">
+                    <a href="#">关于我们</a> | <a href="#">联系我们</a> | 联系客服 | 商家入驻 | 营销中心 | 手机TeamRay | 友情链接 | 销售联盟 | TeamRay社区 | TeamRay公益 | English Site | Contact U
+                </div>
+                <div class="copyright">
+                    地址：北京市东城区珍贝大厦二层达内python学院 邮编：100096 电话：400-618-4000 传真：010-82935100 邮箱: TeamRay@163.con <br> 京ICP备08001421号京公网安备110108007702
+                </div>
+            </div>
+    </div>
+    </footer>
+    </div>
+</body>
+<script>
+    function yz3(obj) {
+        var password = document.getElementById("password_1").value
+        if (password.length < 3) {
+            document.getElementById("password2").className = 'error_icon'
+        } else {
+            document.getElementById("password2").className = 'success_icon'
+        }
+    }
+
+    function yz4(obj) {
+        var p1 = document.getElementById("password_2").value
+        var p2 = document.getElementById("password_1").value
+
+        if (p1 == p2) {
+            document.getElementById("password4").className = 'success_icon'
+        } else {
+            document.getElementById("password4").className = 'error_icon'
+        }
+    }
+
+    var countdown = 60;
+
+    function settime(obj) {
+        if (countdown == 0) {
+            obj.removeAttribute("disabled");
+            obj.value = "免费获取验证码";
+            countdown = 60;
+            return;
+        } else {
+            obj.setAttribute("disabled", true);
+            obj.value = "重新发送(" + countdown + ")";
+            countdown--;
+        }
+        setTimeout(function() {
+            settime(obj)
+        }, 1000)
+    }
+
+    function yz(obj) {
+        var x = document.getElementById("username").value
+        if (x.length > 8) {
+            document.getElementById("username2").className = 'error_icon'
+        } else {
+            document.getElementById("username2").className = 'success_icon'
+
+        }
+    }
+
+    function yz2(obj) {
+        var phone = document.getElementById('phone').value
+        var reg = /^1[0-9]{10}$/;
+        if (!reg.test(phone)) {
+            document.getElementById('phone2').className = 'error_icon'
+        } else {
+            document.getElementById('phone2').className = 'success_icon'
+        }
+    }
+
+    function yz5(obj) {
+        var email = document.getElementById('email').value
+        var reg = /.*?@/;
+        if (!reg.test(email)) {
+            document.getElementById('email2').className = 'error_icon'
+        } else {
+            document.getElementById('email2').className = 'success_icon'
+        }
+    }
+
+    function register() {
+        var agree = document.getElementById('agree')
+        if (agree.checked == 0) {
+            alert('请勾选知晓用户协议')
+        } else {
+            var username = $('#username').val();
+            var phone = $('#phone').val();
+            var password_1 = $("#password_1").val();
+            var password_2 = $("#password_2").val();
+            var email = $("#email").val();
+            var post_data = {
+                'username': username,
+                'email': email,
+                'phone': phone,
+                'password_1': password_1,
+                'password_2': password_2,
+            }
+            console.log(post_data)
+            $.ajax({
+                url: 'http://127.0.0.1:8000/v1/users',
+                type: 'POST',
+                //将json对象序列化为json串
+                data: JSON.stringify(post_data),
+                // 前端给后端的数据类型
+                contentType: 'application/json',
+                // 后端给前端的数据类型
+                dataType: 'json',
+                // 响应成功的回调函数,res是响应的数据，jquery会自动将收到的json串转化为json对象
+                success: function(res) {
+                    if (res.code == 200) {
+                        alert('注册成功！')
+                            // 在本地存储中存储token和用户名
+                        window.localStorage.setItem('TeamRay_token', res.data.token)
+                        window.localStorage.setItem('TeamRay_user', res.username)
+                    } else {
+                        console.log(res.code)
+                        alert(res.error, )
+                    }
+                }
+            })
+        }
+    }
+</script>
+
+</html>
+
+</html>
