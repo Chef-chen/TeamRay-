@@ -472,7 +472,11 @@
 
     function search_list() {
         var search = document.getElementById('search_list').value
-        window.location.href = '/' + search + '/list'
+        if (search) {
+            window.location.href = '/' + search + '/list'
+        } else {
+            window.location.href = '/*/list'
+        }
     }
 </script>
 

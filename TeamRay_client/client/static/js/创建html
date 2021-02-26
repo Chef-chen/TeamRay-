@@ -1,0 +1,12 @@
+<li><a href=""><div class="single_good" id="good_1"><img id="pic_1" src="" alt="" class="pic"><span id="title_1" class="title"></span><span id="time_1" class="time"></span><span id="price_1" class="price"></span></div></li>
+
+
+`<li><a href=""><div class="single_good" id="good_${n}"><img id="pic_${n}" src="" alt="" class="pic"><span id="title_${n}" class="title"></span><span id="time_${n}" class="time"></span><span id="price_${n}" class="price"></span></div></li>`
+
+
+`title_${n+1}`
+`time_${n+1}`
+
+
+
+'http://127.0.0.1:8000/media/'+result.data[n].user+'/pic/'+result.data[n].pic

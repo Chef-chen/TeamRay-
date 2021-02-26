@@ -75,13 +75,13 @@
         <!-- logo模块 -->
         <div class="logo">
             <h1>
-                <a href="/index" title="TeamRay二手车/房源">TeamRay中介平台</a>
+                <a href="index" title="TeamRay二手车/房源">TeamRay中介平台</a>
             </h1>
         </div>
         <!-- search搜索模块 -->
         <div class=" search ">
-            <input type="search " name=" " id=" " placeholder="华晨宝马 ">
-            <button>搜索</button>
+            <input type="search " name=" " id="search_list" placeholder="">
+            <button onclick="search_list()">搜索</button>
         </div>
         <!-- hotwords模块制作 -->
         <div class="hotwords ">
@@ -295,6 +295,15 @@
 
         window.location.href = '/' + username + '/good/release'
 
+    }
+
+    function search_list() {
+        var search = document.getElementById('search_list').value
+        if (search) {
+            window.location.href = '/' + search + '/list'
+        } else {
+            window.location.href = '/*/list'
+        }
     }
 </script>
 

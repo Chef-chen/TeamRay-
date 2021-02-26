@@ -5,4 +5,5 @@ urlpatterns = [
     path('<str:username>',views.UserView.as_view()),
     path('<str:username>/avatar',views.user_avatar),
     path('<str:username>/pic',views.user_pic),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 ]

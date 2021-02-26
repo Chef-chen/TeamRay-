@@ -66,3 +66,30 @@ class GoodView(View):
             return JsonResponse(result)
         else:
             return HttpResponse('返回所有信息')
+
+
+def Good_list(request,good_name):
+    print('收到',good_name)
+    goods_list = Topic.objects.filter(title__contains=f'{good_name}')
+
+    if good_name in {'','*','123'}:
+        goods_list = Topic.objects.all()
+    good_data = []
+    for good in goods_list:
+        good_dic={}
+        good_dic['title']=good.title
+        good_dic['price']=good.price
+        good_dic['type']=good.type
+        good_dic['pic']=str(good.pic)
+        good_dic['content']=good.content
+        good_dic['time']=str(good.created_time)[0:4]
+        good_dic['user']=good.user_profile.username
+        good_data.append(good_dic)
+    if good_data:
+        result = {'code':200,'data':good_data}
+        print('已成功返回')
+    else:
+        result = {'code': 201, 'data': '无此类商品'}
+        print('已失败返回')
+
+    return JsonResponse(result)

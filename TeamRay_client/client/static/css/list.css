@@ -65,3 +65,47 @@
 .sk_bd ul li:hover {
     border: 1px solid #c81523;
 }
+
+.pic {
+    width: 284px;
+    height: 214px;
+    position: relative;
+    top: 10px;
+}
+
+.single_good span {
+    text-indent: 22px;
+    position: relative;
+    display: inline-block;
+    background-color: white;
+}
+
+.title {
+    width: 284px;
+    height: 30px;
+    color: rgb(73, 80, 86);
+    font-size: 19px;
+    top: 28px;
+    font-weight: 550;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.time {
+    top: 33px;
+    font-size: 15px;
+    color: rgb(165, 179, 205);
+}
+
+.price {
+    color: rgb(251, 89, 40);
+    top: 40px;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.single_good {
+    border: 1px solid rgb(245, 245, 245);
+}

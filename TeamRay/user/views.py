@@ -4,7 +4,7 @@ from hashlib import md5
 import os
 import jwt
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 
 from .models import User
@@ -125,4 +125,11 @@ def user_pic(request,username):
 
 # http://127.0.0.1:8000/media/pic/1612158363(1).jpg
 # http://127.0.0.1:8000/media/avatar/90e26f8f5188b0411fac3e43af1a73a.jpg
+from django.contrib.auth import logout
 
+
+class LogoutView(View):
+    def get(self,request):
+        logout(request)
+
+        return redirect('http://127.0.0.1:5000/index')
